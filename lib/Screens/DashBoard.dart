@@ -51,17 +51,21 @@ class _DashBoardState extends State<DashBoard> {
   // );
   // });
 
+
+  /// This function is used to check the Wi-fi connection
+  /// If the device is “not connected to internet” or it has lost it’s connection
+  /// it will show the user this sentence in a snack bar.
   checkConnection() async {
     var _result = await (Connectivity().checkConnectivity());
 
     if (_result != ConnectivityResult.mobile &&
         _result != ConnectivityResult.wifi) {
       ShowSnackBar(
-              context: context,
-              text: 'Not Connected to Internet',
-              color: Colors.red,
-              isWifi: true,
-              icon: Icons.wifi_off)
+          context: context,
+          text: 'Not Connected to Internet',
+          color: Colors.red,
+          isWifi: true,
+          icon: Icons.wifi_off)
           .show();
     }
 
@@ -71,11 +75,11 @@ class _DashBoardState extends State<DashBoard> {
       if (result != ConnectivityResult.mobile &&
           result != ConnectivityResult.wifi) {
         ShowSnackBar(
-                context: context,
-                text: 'No Connection',
-                color: Colors.red,
-                isWifi: true,
-                icon: Icons.wifi_off)
+            context: context,
+            text: 'No Connection',
+            color: Colors.red,
+            isWifi: true,
+            icon: Icons.wifi_off)
             .show();
       }
     });
@@ -139,6 +143,10 @@ class _DashBoardState extends State<DashBoard> {
               ),
             ),
             SizedBox(height: 10.0),
+            ///If the user is not logged in it can use the button Sign Up and he can
+            ///create a new account only if he is an admin.
+            ///To check if he is an admin it will be navigated to the OTP screen where
+            ///he need to enter the admin code.
             !_isUser? Row(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -174,40 +182,43 @@ class _DashBoardState extends State<DashBoard> {
                 ),
               ],
             )
-            : Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GestureDetector(
-                  onTap: () {
-                    DashBoard.isUser = false;
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => NavBar.ind(index: 1,isUser: false)
-                        ),(Route<dynamic> route) => false
-                    );
-                  },
-                  child: Container(
-                    width: MediaQuery.of(context).size.width * 0.6,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(20),
-                          bottomRight: Radius.circular(20)),
-                    ),
-                    child: Center(
-                      child: Text(
-                        'Sign out'.tr().toString(),
-                        style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+            ///If the user is logged in he view an other button, the Sign Out button that
+            ///can be used to log out the user and will return him to the dashboard but as
+            ///a guest(it will show him again the Sign Up button).
+                : Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      DashBoard.isUser = false;
+                      Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => NavBar.ind(index: 1,isUser: false)
+                          ),(Route<dynamic> route) => false
+                      );
+                    },
+                    child: Container(
+                      width: MediaQuery.of(context).size.width * 0.6,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(20),
+                            bottomRight: Radius.circular(20)),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Sign out'.tr().toString(),
+                          style: TextStyle(
+                            fontSize: 30,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
               ],
             ),
           ],

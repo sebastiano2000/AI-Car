@@ -204,6 +204,8 @@ class _ChatBotState extends State<ChatBot> {
                             String userMessage = messageInsert.text;
 
                             if (!error) {
+                              ///If the new command sent to the bot is already in the list it
+                              ///will send an error message to the user and will ask him to send a new one.
                               if (userMessage.isNotEmpty) {
                                 bool isFound = false;
 
@@ -269,6 +271,8 @@ class _ChatBotState extends State<ChatBot> {
                                 int status;
                                 int temp = 0 + Random().nextInt(2 - 0);
 
+                                ///This function is used to check if the text sent by the user is in English
+                                /// or Arabic to permits the bot to responds in the same language.
                                 setState(() {
                                   int lang;
                                   RegExp englishRegex = new RegExp(r'^[a-zA-Z0-9. -_?]*$');
@@ -276,10 +280,6 @@ class _ChatBotState extends State<ChatBot> {
 
                                   try{
                                     status = prefs.getInt("message");
-                                    print(status);
-                                    print(status);
-                                    print(status);
-                                    print(status);
                                     if(status == null){
                                       status = 0;
                                     }
@@ -444,12 +444,12 @@ class _ChatBotState extends State<ChatBot> {
         children: [
           data == 0
               ? Container(
-                  height: 60,
-                  width: 60,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage("assets/Images/robot.jpg"),
-                  ),
-                )
+            height: 60,
+            width: 60,
+            child: CircleAvatar(
+              backgroundImage: AssetImage("assets/Images/robot.jpg"),
+            ),
+          )
               : Container(),
           Padding(
             padding: EdgeInsets.all(10.0),
@@ -477,12 +477,12 @@ class _ChatBotState extends State<ChatBot> {
           ),
           data == 1
               ? Container(
-                  height: 60,
-                  width: 60,
-                  child: CircleAvatar(
-                    backgroundImage: AssetImage("assets/Images/Seby.jpeg"),
-                  ),
-                )
+            height: 60,
+            width: 60,
+            child: CircleAvatar(
+              backgroundImage: AssetImage("assets/Images/Seby.jpeg"),
+            ),
+          )
               : Container(),
         ],
       ),

@@ -62,6 +62,7 @@ class _AboutUsState extends State<AboutUs> {
               width: 300,
               margin: const EdgeInsets.all(15.0),
               padding: const EdgeInsets.all(20.0),
+              ///Here are shown four images of the vehicle in a slide show with 5 seconds for each image.
               child: Carousel(
                 showIndicator: true,
                 dotColor: Colors.red,
@@ -121,6 +122,10 @@ class _AboutUsState extends State<AboutUs> {
                       color: Colors.black,
                       width: 120,
                       height: 120,
+                      ///Here for each component in the page there are two images: one of the
+                      ///component and the other to show the user how it is connected.
+                      ///The user can navigate between the two images by clicking on the image
+                      ///that will flip and show him the second one.
                       child: PageFlipBuilder(
                         key: pageFlipKey,
                         frontBuilder: (_) => LightHomePage(
@@ -211,8 +216,8 @@ class _AboutUsState extends State<AboutUs> {
                                 minFontSize: 12,
                                 maxLines: 10,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -293,7 +298,7 @@ class _AboutUsState extends State<AboutUs> {
                               ),
                               SizedBox(height:5),
                               AutoSizeText('Micro Servo Motor SG90 is a tiny and lightweight server motor with high '
-                                'output power. Servo can rotate approximately 180 degrees.'.tr().toString(),
+                                  'output power. Servo can rotate approximately 180 degrees.'.tr().toString(),
                                 maxFontSize: 16,
                                 minFontSize: 12,
                                 maxLines: 10,
@@ -343,8 +348,8 @@ class _AboutUsState extends State<AboutUs> {
                                 minFontSize: 12,
                                 maxLines: 10,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -431,8 +436,8 @@ class _AboutUsState extends State<AboutUs> {
                                 minFontSize: 12,
                                 maxLines: 10,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -477,8 +482,8 @@ class _AboutUsState extends State<AboutUs> {
                                 minFontSize: 12,
                                 maxLines: 10,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -564,8 +569,8 @@ class _AboutUsState extends State<AboutUs> {
                                 minFontSize: 12,
                                 maxLines: 10,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -610,8 +615,8 @@ class _AboutUsState extends State<AboutUs> {
                                 minFontSize: 12,
                                 maxLines: 10,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -698,8 +703,8 @@ class _AboutUsState extends State<AboutUs> {
                                 minFontSize: 12,
                                 maxLines: 10,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -743,8 +748,8 @@ class _AboutUsState extends State<AboutUs> {
                                 minFontSize: 12,
                                 maxLines: 10,
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
+                                  color: Colors.white,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -811,10 +816,10 @@ class LightHomePage extends StatelessWidget {
           child: InkWell(
             onTap: onFlip,
             child: Image.asset(
-                image,
-                width: 125,
-                height: 120,
-                fit: BoxFit.fill,
+              image,
+              width: 125,
+              height: 120,
+              fit: BoxFit.fill,
             ),
           ),
         ),

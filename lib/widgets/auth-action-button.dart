@@ -62,6 +62,9 @@ class _AuthActionButtonState extends State<AuthActionButton> {
     _imageFileList = value == null ? null : <XFile>[value];
   }
 
+  ///It will get the path of the image loaded by the admin when
+  ///he signed up and it will store it in the storage section of flutter in a folder named users.
+  ///After uploading image it will return it’s URL to save it with the other data of the user in the database.
   Future<void> saveImage() async {
     try {
       _imagePa = _imageFileList.last.path.split("/").last;

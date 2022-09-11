@@ -10,6 +10,8 @@ class BluetoothDeviceListEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    ///It will show all the Bluetooth devices to the user to choose
+    ///which device will he connect with the application.
     return ListTile(
       onTap: onTap,
       leading: Icon(Icons.devices),

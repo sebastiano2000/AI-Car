@@ -104,6 +104,7 @@ class _ChatPage extends State<VoiceControl> {
   List<String> left = [];
   List<String> stop = [];
   String _messageBuffer = '';
+  bool isStopped = false;
 
   final TextEditingController textEditingController =
   new TextEditingController();
@@ -354,10 +355,11 @@ class _ChatPage extends State<VoiceControl> {
             }
         }
 
+        if(!isStopped || !text.contains('Stop')) {
           setState(() {
-          messages.add(_Message(clientID, text));
-        });
-
+            messages.add(_Message(clientID, text));
+          });
+        }
         Future.delayed(Duration(milliseconds: 333)).then((_) {
           listScrollController.animateTo(
               listScrollController.position.maxScrollExtent,
@@ -374,20 +376,19 @@ class _ChatPage extends State<VoiceControl> {
   void _listen() async {
     await load();
 
+    ///Receive the voice commands from the user and comvert it to text
+    ///then send it to the arduino as integers signals
+
     if (!_isListening) {
-      bool available = await _speech.initialize(
-        onStatus: (val) => print('onStatus: $val'),
-        onError: (val) => print('onError: $val'),
-      );
+      bool available = await _speech.initialize();
       if (available) {
         setState(() => _isListening = true);
         _speech.listen(
-          //localeId: context.locale.toString(),
+          localeId: context.locale.toString(),
           onResult: (val) => setState(() {
+            _text = "";
             _text = val.recognizedWords;
-            if (val.hasConfidenceRating && val.confidence > 0) {
-              _confidence = val.confidence;
-            }
+            isStopped = false;
           }),
         );
       }
@@ -400,7 +401,7 @@ class _ChatPage extends State<VoiceControl> {
 
   void moveServo() {
     for(int i = 0 ; i < forward.length ; i++){
-      if(_text.contains(forward[i])){
+      if(_text.contains(forward[i]) || _text.contains("امام") ){
         _sendMessage('0');
         break;
       }
@@ -421,16 +422,5 @@ class _ChatPage extends State<VoiceControl> {
         break;
       }
     }
-    // if (_text.contains('forward') || _text.contains('up') || _text.contains('front')) {
-    //   _sendMessage('0');
-    // } else if (_text.contains('backward') || _text.contains('back') || _text.contains('down')) {
-    //   _sendMessage("1");
-    // } else if (_text.contains('right')) {
-    //   _sendMessage('2');
-    // } else if (_text.contains('left')) {
-    //   _sendMessage('3');
-    // } else if (_text.contains('stop')) {
-    //   _sendMessage('4');
-    // }
   }
 }

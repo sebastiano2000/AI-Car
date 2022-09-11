@@ -1,12 +1,17 @@
 import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bluetooth_serial/flutter_bluetooth_serial.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:graduation_project/Screens/Manual.dart';
+import 'package:graduation_project/Screens/ObjectDetection.dart';
+import 'package:graduation_project/Screens/manualControl.dart';
+import 'package:graduation_project/Screens/voiceControl.dart';
 import 'package:graduation_project/widgets/Constants.dart';
 import 'package:lottie/lottie.dart';
 import 'package:page_transition/page_transition.dart';
@@ -19,15 +24,16 @@ import 'DashBoard.dart';
 import 'Voice.dart';
 
 class ControlRoom extends StatefulWidget {
-  const ControlRoom(this.username,this.photo, {Key key}) : super(key: key);
+  const ControlRoom(this.username,this.photo, this.server, {Key key}) : super(key: key);
 
   static const String id = 'ControlRoomScreen';
 
+  final BluetoothDevice server;
   final String username;
   final String photo;
 
   @override
-  State<ControlRoom> createState() => _ControlRoomState(username, photo);
+  State<ControlRoom> createState() => _ControlRoomState(username, photo, server);
 }
 
 class _ControlRoomState extends State<ControlRoom> {
@@ -39,6 +45,7 @@ class _ControlRoomState extends State<ControlRoom> {
     DashBoard.isUser = true;
   }
 
+  BluetoothDevice server;
   List<String> bot = [];
   List<String> commands = [];
 
@@ -50,7 +57,7 @@ class _ControlRoomState extends State<ControlRoom> {
   String username;
   String photo;
 
-  _ControlRoomState(this.username, this.photo);
+  _ControlRoomState(this.username, this.photo, this.server);
 
   Future<void> load() async {
     bot.clear();
@@ -184,93 +191,93 @@ class _ControlRoomState extends State<ControlRoom> {
                       onTap: () {
                         setState(() {
                           Alert(
-                          style: AlertStyle(
-                              animationType: AnimationType.fromTop,
-                              isButtonVisible: false,
-                              isCloseButton: true,
-                              isOverlayTapDismiss: true,
-                              animationDuration: Duration(milliseconds: 700),
-                              alertBorder: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                side: BorderSide(
-                                  color: Colors.grey,
+                            style: AlertStyle(
+                                animationType: AnimationType.fromTop,
+                                isButtonVisible: false,
+                                isCloseButton: true,
+                                isOverlayTapDismiss: true,
+                                animationDuration: Duration(milliseconds: 700),
+                                alertBorder: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                  side: BorderSide(
+                                    color: Colors.grey,
+                                  ),
+                                )),
+                            context: context,
+                            title: "Choose Language".tr().toString(),
+                            content: Directionality(
+                              textDirection: ui.TextDirection.ltr,
+                              child: DropdownButton(
+                                hint: Text(
+                                  "Change Language".tr().toString(),
+                                  style: TextStyle(
+                                    color: Colors.blue,
+                                  ),
                                 ),
-                              )),
-                          context: context,
-                          title: "Choose Language".tr().toString(),
-                          content: Directionality(
-                            textDirection: ui.TextDirection.ltr,
-                            child: DropdownButton(
-                              hint: Text(
-                                "Change Language".tr().toString(),
-                                style: TextStyle(
-                                  color: Colors.blue,
+                                onChanged: (Language language) {
+                                  _changeLanguage(language);
+                                  Navigator.pop(context);
+                                },
+                                dropdownColor: Colors.white,
+                                items: Language.languageList()
+                                    .map<DropdownMenuItem<Language>>((lang) =>
+                                    DropdownMenuItem(
+                                      value: lang,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                        children: <Widget>[
+                                          Text(
+                                            lang.flag,
+                                            style: TextStyle(fontSize: 23),
+                                          ),
+                                          Text(
+                                            lang.name,
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                color: Colors.black),
+                                          )
+                                        ],
+                                      ),
+                                    ))
+                                    .toList(),
+                                icon: Icon(
+                                  Icons.language,
+                                  size: 35,
+                                  color: Colors.grey[700],
                                 ),
-                              ),
-                              onChanged: (Language language) {
-                                _changeLanguage(language);
-                                Navigator.pop(context);
-                              },
-                              dropdownColor: Colors.white,
-                              items: Language.languageList()
-                                  .map<DropdownMenuItem<Language>>((lang) =>
-                                      DropdownMenuItem(
-                                        value: lang,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceAround,
-                                          children: <Widget>[
-                                            Text(
-                                              lang.flag,
-                                              style: TextStyle(fontSize: 23),
-                                            ),
-                                            Text(
-                                              lang.name,
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.black),
-                                            )
-                                          ],
-                                        ),
-                                      ))
-                                  .toList(),
-                              icon: Icon(
-                                Icons.language,
-                                size: 35,
-                                color: Colors.grey[700],
                               ),
                             ),
-                          ),
-                        ).show();
+                          ).show();
                         });
                       }),
                   SpeedDialChild(
-                    child: Directionality(
-                      textDirection: ui.TextDirection.ltr,
-                      child: Padding(
-                        padding: const EdgeInsets.only(
-                            left: 0.0, bottom: 5, right: 5),
-                        child: Icon(
-                          FontAwesomeIcons.robot,
-                          color: Colors.white,
-                          size: 25,
+                      child: Directionality(
+                        textDirection: ui.TextDirection.ltr,
+                        child: Padding(
+                          padding: const EdgeInsets.only(
+                              left: 0.0, bottom: 5, right: 5),
+                          child: Icon(
+                            FontAwesomeIcons.robot,
+                            color: Colors.white,
+                            size: 25,
+                          ),
                         ),
                       ),
-                    ),
-                    backgroundColor: Color(0xff0E4EC9),
-                    onTap: () async {
-                      await load();
+                      backgroundColor: Color(0xff0E4EC9),
+                      onTap: () async {
+                        await load();
 
-                      Navigation(
-                          widget: widget,
-                          context: context,
-                          type: PageTransitionType.fade,
-                          screen: ChatBot(
-                            bot: bot,
-                            commands: commands,
-                            username: widget.username,
-                          )).navigate();
-                    }),
+                        Navigation(
+                            widget: widget,
+                            context: context,
+                            type: PageTransitionType.fade,
+                            screen: ChatBot(
+                              bot: bot,
+                              commands: commands,
+                              username: widget.username,
+                            )).navigate();
+                      }),
                 ],
               ),
               backgroundColor: buttonsColor,
@@ -297,15 +304,15 @@ class _ControlRoomState extends State<ControlRoom> {
                             height: 75,
                             child: photo != null
                                 ? SizedBox(
-                                  height: 250,
-                                  child: CachedNetworkImage(
-                                    imageUrl: photo,
-                                    placeholder: (context, url) =>
-                                      CircularProgressIndicator(),
-                                    errorWidget: (context, url, error) =>
-                                      Icon(Icons.error),
-                                  ),
-                                )
+                              height: 250,
+                              child: CachedNetworkImage(
+                                imageUrl: photo,
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                              ),
+                            )
                                 : Container(width: 0.0, height: 0.0),
                           ),
                           AnimatedTextKit(
@@ -331,21 +338,30 @@ class _ControlRoomState extends State<ControlRoom> {
                         children: [
                           InkWell(
                             onTap: () async{
-                              Map<Permission, PermissionStatus> statuses = await [
-                                Permission.bluetooth,
-                                Permission.bluetoothAdvertise,
-                                Permission.bluetoothConnect,
-                                Permission.bluetoothScan,
-                              ].request();
+                              // Map<Permission, PermissionStatus> statuses = await [
+                              //   Permission.bluetooth,
+                              //   Permission.bluetoothAdvertise,
+                              //   Permission.bluetoothConnect,
+                              //   Permission.bluetoothScan,
+                              // ].request();
+                              //
+                              // if(statuses.isNotEmpty){
+                              //   Navigation(
+                              //       widget: widget,
+                              //       context: context,
+                              //       type: PageTransitionType.rightToLeft,
+                              //       screen: Voice())
+                              //       .navigate();
+                              // }
 
-                              if(statuses.isNotEmpty){
-                                Navigation(
-                                    widget: widget,
-                                    context: context,
-                                    type: PageTransitionType.rightToLeft,
-                                    screen: Voice())
-                                    .navigate();
-                              }
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return VoiceControl(server: server);
+                                  },
+                                ),
+                              );
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.9,
@@ -395,8 +411,31 @@ class _ControlRoomState extends State<ControlRoom> {
                         //mainAxisSize: MainAxisSize.min,
                         children: [
                           InkWell(
-                            onTap: () {
+                            onTap: () async{
+                              // Map<Permission, PermissionStatus> statuses = await [
+                              //   Permission.bluetooth,
+                              //   Permission.bluetoothAdvertise,
+                              //   Permission.bluetoothConnect,
+                              //   Permission.bluetoothScan,
+                              // ].request();
+                              //
+                              // if(statuses.isNotEmpty){
+                              //   Navigation(
+                              //       widget: widget,
+                              //       context: context,
+                              //       type: PageTransitionType.rightToLeft,
+                              //       screen: Manual())
+                              //       .navigate();
+                              // }
 
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) {
+                                    return ManualControl(server: server);
+                                  },
+                                ),
+                              );
                             },
                             child: Container(
                               width: MediaQuery.of(context).size.width * 0.9,
@@ -430,6 +469,63 @@ class _ControlRoomState extends State<ControlRoom> {
                                       width: MediaQuery.of(context).size.width *
                                           0.42,
                                     ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 30,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        //mainAxisSize: MainAxisSize.min,
+                        children: [
+                          InkWell(
+                            onTap: () async{
+                              try {
+                                List<CameraDescription> cameras = await availableCameras();
+
+                                Navigation(
+                                    widget: widget,
+                                    context: context,
+                                    type: PageTransitionType.rightToLeft,
+                                    screen: ObjectDetection(cameras))
+                                    .navigate();
+                              } on CameraException catch (e) {
+                                print('Error: $e.code\nError Message: $e.message');
+                              }
+
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              height: 200,
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    bottomLeft: Radius.circular(20)),
+                              ),
+                              child: Center(
+                                child: Row(
+                                  children: [
+                                    Lottie.asset(
+                                      'assets/object.json',
+                                      height: 300,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.42,
+                                    ),
+                                    Text(
+                                      'Object\nDetection'.tr().toString(),
+                                      style: TextStyle(
+                                        fontSize: 35,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                    // SizedBox(
+                                    //   width: 5,
+                                    // ),
                                   ],
                                 ),
                               ),

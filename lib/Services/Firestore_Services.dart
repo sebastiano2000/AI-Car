@@ -83,6 +83,8 @@ class FireStoreServices {
     return name;
   }
 
+  ///This function is used to get the photo of the user,
+  ///by comparing the email of the user with the emails of the all users, that is saved as a string.
   Future<String> getPhoto(String email) async {
     String photo;
 

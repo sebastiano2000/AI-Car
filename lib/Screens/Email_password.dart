@@ -10,6 +10,7 @@ import '../Services/AuthServices.dart';
 import '../widgets/Constants.dart';
 import '../widgets/FadeAnimation.dart';
 import 'navbar.dart';
+import 'package:crypto/crypto.dart';
 
 class Email_Password extends StatefulWidget {
   const Email_Password({Key key}) : super(key: key);
@@ -228,6 +229,21 @@ class _Email_PasswordState extends State<Email_Password> {
                                             showSpinner = true;
                                           });
                                           try {
+                                            ///Utilize the md5 hashing algorithm to encrypt the user
+                                            ///password for better security
+
+                                            Hash hasher = md5;
+
+                                            String input = _password;
+
+                                            if (input.isNotEmpty) {
+                                              return;
+                                            }
+
+                                            var value = hasher.convert(input.codeUnits);
+
+                                            print(value);
+
                                             final user = await AuthServices()
                                                 .signInWithEmail(_email, _password);
 
