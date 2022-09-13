@@ -21,16 +21,16 @@ class LTextField extends StatelessWidget {
 
   LTextField(
       {@required this.icon,
-      this.hintText,
-      this.labelText,
-      @required this.isSecured,
-      this.keyboardType,
-      this.maxLength,
-      this.validator,
-      this.onChanged,
-      this.controller,
-      this.endIcon,
-      this.isAutoValidate = AutovalidateMode.disabled});
+        this.hintText,
+        this.labelText,
+        @required this.isSecured,
+        this.keyboardType,
+        this.maxLength,
+        this.validator,
+        this.onChanged,
+        this.controller,
+        this.endIcon,
+        this.isAutoValidate = AutovalidateMode.disabled});
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +84,13 @@ class loadingButtons extends StatelessWidget {
 
   loadingButtons(
       {this.text,
-      @required this.loadingType,
-      this.colour,
-      this.width,
-      this.textColor,
-      this.onTap,
-      this.height = 50,
-      this.fontsize = 18});
+        @required this.loadingType,
+        this.colour,
+        this.width,
+        this.textColor,
+        this.onTap,
+        this.height = 50,
+        this.fontsize = 18});
 
   @override
   Widget build(BuildContext context) {
@@ -192,17 +192,17 @@ class Navigation {
         this.type
       });
 
-    void navigate(){
-      Navigator.of(context).push(PageTransition(
-          type: type,
-          duration: Duration(milliseconds: 800),
-          reverseDuration: Duration(milliseconds: 600),
-          child: screen
-      ));
-    }
+  void navigate(){
+    Navigator.of(context).push(PageTransition(
+        type: type,
+        duration: Duration(milliseconds: 800),
+        reverseDuration: Duration(milliseconds: 600),
+        child: screen
+    ));
+  }
 }
 
 const Color backColor = Color(0xff138def);
 const Color buttonsColor = Color(0xFF1E90FF);
 const Color chatBotColor = Color(0xff030e45);
-
+const kPrimaryLightColor = Color(0xFFF1E6FF);

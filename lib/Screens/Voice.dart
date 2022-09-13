@@ -15,8 +15,6 @@ class Voice extends StatelessWidget {
   String username;
   String photo;
 
-  static const String id = 'Voice';
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

@@ -49,7 +49,6 @@ class _SelectBondedDevicePage extends State<SelectBondedDevicePage> {
       _startDiscovery();
     }
 
-    String bluetooth_device = "";
 
     // Setup a list of the bonded devices
     FlutterBluetoothSerial.instance
@@ -57,7 +56,7 @@ class _SelectBondedDevicePage extends State<SelectBondedDevicePage> {
         .then((List<BluetoothDevice> bondedDevices) {
       setState(() {
         bondedDevices.removeWhere(
-                (bondedDevices) => !bondedDevices.name.contains(bluetooth_device)
+                (bondedDevices) => !bondedDevices.name.contains("HC-05")
         );
 
         devices = bondedDevices

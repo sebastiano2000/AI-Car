@@ -12,6 +12,8 @@ import '../Services/AuthServices.dart';
 import '../Services/Firestore_Services.dart';
 import '../widgets/Constants.dart';
 import '../widgets/FadeAnimation.dart';
+import 'DashBoard.dart';
+import 'navbar.dart';
 
 class ResetPassword extends StatefulWidget {
   static const String id = 'ResetPassword';
@@ -108,12 +110,12 @@ class _ResetPasswordState extends State<ResetPassword> {
                                             .toString(),
                                         labelText: 'Password'.tr().toString(),
                                         keyboardType:
-                                            TextInputType.visiblePassword,
+                                        TextInputType.visiblePassword,
                                         maxLength: 20,
                                         validator:
-                                            Validations().passwordValidator,
+                                        Validations().passwordValidator,
                                         onChanged: (String value) =>
-                                            _password = value,
+                                        _password = value,
                                         controller: _passController,
                                         endIcon: IconButton(
                                           icon: _changedIcon,
@@ -150,14 +152,14 @@ class _ResetPasswordState extends State<ResetPassword> {
                                               .tr()
                                               .toString(),
                                           keyboardType:
-                                              TextInputType.visiblePassword,
+                                          TextInputType.visiblePassword,
                                           maxLength: 20,
                                           validator: (val) => MatchValidator(
-                                                errorText:
-                                                    'Passwords do not match'
-                                                        .tr()
-                                                        .toString(),
-                                              ).validateMatch(val, _password),
+                                            errorText:
+                                            'Passwords do not match'
+                                                .tr()
+                                                .toString(),
+                                          ).validateMatch(val, _password),
                                           controller: _confirmController,
                                           endIcon: IconButton(
                                               icon: _changedIcon,
@@ -204,11 +206,8 @@ class _ResetPasswordState extends State<ResetPassword> {
                                               showSpinner = true;
                                             });
                                             String oldPassword =
-                                                await FireStoreServices()
-                                                    .getPassword(_userEmail);
-                                            await AuthServices()
-                                                .signInWithEmail(
-                                                    _userEmail, oldPassword);
+                                            await FireStoreServices()
+                                                .getPassword(_userEmail);
 
                                             if (oldPassword ==
                                                 _passController.text) {
@@ -220,8 +219,29 @@ class _ResetPasswordState extends State<ResetPassword> {
                                                       .tr()
                                                       .toString(),
                                                   AlertType.error);
+                                            }else{
+                                              await AuthServices()
+                                                  .signInWithEmail(
+                                                  _userEmail, oldPassword);
+
+                                              await AuthServices().updatePassword(_passController.text);
+                                              await AuthServices.signOut();
+
+
+                                              DashBoard.isUser = false;
+                                              Navigator.pushAndRemoveUntil(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                      builder: (context) => NavBar.ind(index: 1,isUser: false)
+                                                  ),(Route<dynamic> route) => false
+                                              );
+
                                             }
-                                            setState(() {});
+
+                                            stopLoading();
+                                            setState(() {
+                                              showSpinner = false;
+                                            });
                                           }
                                         })
                                   ],
